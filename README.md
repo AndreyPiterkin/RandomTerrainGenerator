@@ -1,6 +1,6 @@
 *TODO*: Please edit the following information in your final project
 
-## Edit this line: Put your 'title' of your project here Pseudorandom Terrain Generation
+## Pseudorandom Terrain Generation
 
 ## Edit this line: Put your link to your youtube video here (see deliverables).
 
