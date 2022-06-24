@@ -6,7 +6,7 @@ import platform
 COMPILER="g++ -std=c++17"   # The compiler we want to use 
                                 #(You may try g++ if you have trouble)
 SOURCE="./src/*.cpp"    # Where the source code lives
-EXECUTABLE="lab"        # Name of the final executable
+EXECUTABLE="project"        # Name of the final executable
 # ======================= COMMON CONFIGURATION OPTIONS ======================= #
 
 # (2)=================== Platform specific configuration ===================== #
