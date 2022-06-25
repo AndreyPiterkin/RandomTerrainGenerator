@@ -21,6 +21,7 @@ private:
     float lerp(float a1, float a2, float t);
     float perlin(float x, float y);
 
+    // internal psuedorandom permutations of 0-255 for gradient generation
     int permutation[256] = {208,34,231,213,32,248,233,56,161,78,24,140,71,48,140,254,245,255,247,247,40,
                      185,248,251,245,28,124,204,204,76,36,1,107,28,234,163,202,224,245,128,167,204,
                      9,92,217,54,239,174,173,102,193,189,190,121,100,108,167,44,43,77,180,204,8,81,

@@ -14,8 +14,7 @@ Terrain::Terrain(unsigned int xSegs, unsigned int zSegs) :
     m_heightData = new float[m_xSegments*m_zSegments];
 
     // Generate Perlin noise
-    Perlin2D hm(m_xSegments, m_zSegments, 15);
-    hm.saveAsPPM("./assets/textures/noise.ppm");
+    Perlin2D hm(m_xSegments, m_zSegments, rand() % 100);
     m_heightData = hm.getTexture();
 
     // Initialize the terrain
@@ -43,6 +42,8 @@ void Terrain::Init(){
         for(unsigned int x =0; x < m_xSegments; ++x){
             float u = ((float)x/(float)m_xSegments);
             float v = ((float)z/(float)m_zSegments);
+            // Use a math function to smooth out low values and amplify higher values for the heightmap, and offset it
+            // by -100 to bring the heightmap down to a viewable level
             m_geometry.AddVertex(x,300.f / (1 + exp(-2 * pow(m_heightData[x+z*m_xSegments]+0.3,3) + 2))-100,z,u,v);
         }
     }

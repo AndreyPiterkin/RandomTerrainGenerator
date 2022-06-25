@@ -73,7 +73,7 @@ unsigned int Geometry::GetBufferSizeInBytes(){
 void Geometry::Gen(){
 	assert((m_vertexPositions.size()/3) == (m_textureCoords.size()/2));
 
-    // std::cout << m_tempVerts.size();
+    // make the triangles with the tempVerts so that normals are properly calculated
     for (int i = 0; i < m_tempVerts.size() / 3; i++) {
         MakeTriangle(m_tempVerts[i*3+0], m_tempVerts[i*3+1], m_tempVerts[i*3+2]);
     }
@@ -148,11 +148,7 @@ void Geometry::MakeTriangle(unsigned int vert0, unsigned int vert1, unsigned int
 	bitangent = glm::normalize(bitangent);
 	
 	// Compute a normal
-	// For now we sort of 'cheat' since this is a quad the 'z' axis points straight out
     glm::vec3 normal1 = glm::cross(tangent, bitangent) * -1.f;
-    // glm::vec3 normal2{m_normals[vert1*3+0] ,m_normals[vert1*3+1], m_normals[vert1*3+2]};
-    // glm::vec3 normal3{m_normals[vert2*3+0] ,m_normals[vert2*3+1], m_normals[vert2*3+2]};
-
 
 	m_normals[vert0*3+0] = normal1.x;	m_normals[vert0*3+1] = normal1.y;	m_normals[vert0*3+2] = normal1.z;	
 	m_normals[vert1*3+0] = normal1.x;	m_normals[vert1*3+1] = normal1.y;	m_normals[vert1*3+2] = normal1.z;	

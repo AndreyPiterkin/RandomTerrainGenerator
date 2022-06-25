@@ -5,26 +5,26 @@ Perlin2D::Perlin2D(int width, int height, int s) {
     m_height = height;
     seed = s;
     m_tex2d = new float[width*height];
-    float depth = 8;
-    float freq = 0.003f;
+    // number of octaves
+    float octaves = 8;
+    // frequency (size of noise)
     for(int y = 0; y < m_height; y++){
         for(int x = 0; x < m_width; x++){
-            float xa = x*freq;
-            float ya = y*freq;
-            float amp = 12.0;
-            float fin = 0;
-            float div = 0.0;
+            float frequency = 0.003f;
+            float amplitude = 12.0;
+            float total = 0;
+            float denom = 0.0;
 
-            for(int i=0; i<depth; i++)
-            {
-                div += 256 * amp;
-                fin += perlin(xa, ya) * amp;
-                amp /= 2;
-                xa *= 2;
-                ya *= 2;
+            // performs octave passes, adding to total and computing denominator
+            for(int i=0; i<octaves; i++) {
+                denom += 256 * amplitude;
+                total += perlin(x * frequency, y * frequency) * amplitude;
+                amplitude *= 0.5;
+                frequency *= 2;
             }
 
-            m_tex2d[y*m_width+x] = fin/div;
+            // final noise value for this coordinate
+            m_tex2d[y*m_width+x] = total/denom;
         }
     }
 }
@@ -33,19 +33,23 @@ Perlin2D::~Perlin2D() {
     
 }
 
+// get the pointer of the internal noise texture
 float* Perlin2D::getTexture() {
     return m_tex2d;
 }
 
+// linear interpolation
 float Perlin2D::lerp(float a1, float a2, float t) {
     return a1 + t * (a2 - a1);
 }
 
+// produce the pseudorandom permutation
 float Perlin2D::gradient(int x, int y) {
     int tmp = permutation[(y + seed) % 256];
     return permutation[(tmp + x) % 256];
 }
 
+// save texture as PPM P3
 void Perlin2D::saveAsPPM(std::string filename) const {
     std::ofstream out;
     out.open(filename);
@@ -59,6 +63,7 @@ void Perlin2D::saveAsPPM(std::string filename) const {
     }
 }
 
+// compute the noise at the given pixel, getting conrern gradients and interpolating the gradient and distance vectors
 float Perlin2D::perlin(float x, float y) {
     int x_int = x;
     int y_int = y;

@@ -44,11 +44,13 @@ void main()
 {
     // Compute the normal direction
     vec3 norm = normalize(myNormal);
+
+    // get the textures
     vec3 tempDiffuse  = texture(u_DiffuseMap, v_texCoord).rgb;
     vec3 detailColor  = texture(u_DetailMap,  v_texCoord).rgb;
     vec3 auxilDetail = texture(u_AuxilDetail,  v_texCoord).rgb;
-    //max(0, pow(FragPos.y/120, 3))
-    // Store our final texture color
+    // mix diffuse and detail by slope of the terrain, more detail for lower slope, and mix in snowy tall detail after for higher
+    // y values to simulate snow on the peaks
     vec3 diffuseColor = mix(mix(tempDiffuse, detailColor, pow(dot(norm, vec3(0, 1, 0)), 15)), auxilDetail, max(0, pow(FragPos.y/95, 3)));
 
 
