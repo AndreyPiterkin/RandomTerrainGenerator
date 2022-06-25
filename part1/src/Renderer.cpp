@@ -9,23 +9,23 @@ Renderer::Renderer(unsigned int w, unsigned int h)
     m_screenHeight = h;
 
     // By default create one camera per render
-    // TODO: You could abstract out further functions to create
-    //       a camera as a scene node and attach them at various levels.
     Camera *defaultCamera = new Camera();
     // Add our single camera
     m_cameras.push_back(defaultCamera);
     // Initialize the root in our scene
     m_root = nullptr;
 
-    // By derfaflt create one framebuffer within the renderere.
+    // By default create one framebuffer within the renderere.
     Framebuffer *newFramebuffer = new Framebuffer();
     newFramebuffer->Create(w, h);
     m_framebuffers.push_back(newFramebuffer);
 
+    // Load and create shader for our skybox
     std::string vertexShader = m_skyboxShader.LoadShader("./shaders/boxVert.glsl");
     std::string fragmentShader = m_skyboxShader.LoadShader("./shaders/boxFrag.glsl");
     m_skyboxShader.CreateShader(vertexShader, fragmentShader);
 
+    // Load our cubemap using the given faces
     std::vector<std::string> faces{
         "./skybox2/right.jpg",
         "./skybox2/left.jpg",
@@ -103,14 +103,7 @@ void Renderer::Render()
     // and we have to do this every frame!
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    // Nice way to debug your scene in wireframe!
-    // TODO: Read this
-    // Understand that you should only see a single quad
-    // after rendering this, because we are only drawing.
-    // one quad
-    // This is how we know things are working with our FBO
-    // glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    // Test to see if the 'w' key is pressed for a quick view to toggle
+    // The 'w' key is pressed for a quick view to toggle
     // the wireframe view.
     const Uint8 *currentKeyStates = SDL_GetKeyboardState(NULL);
     if (currentKeyStates[SDL_SCANCODE_W])
@@ -128,8 +121,8 @@ void Renderer::Render()
         m_root->Draw();
     }
 
+    // Set up our skybox vertices
     float skyboxVertices[] = {
-        // positions
         -1.0f, 1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
         1.0f, -1.0f, -1.0f,
@@ -172,7 +165,7 @@ void Renderer::Render()
         -1.0f, -1.0f, 1.0f,
         1.0f, -1.0f, 1.0f};
 
-    // skybox VAO
+    // skybox VAO/VBO
     unsigned int skyboxVAO, skyboxVBO;
     glGenVertexArrays(1, &skyboxVAO);
     glGenBuffers(1, &skyboxVBO);
@@ -182,15 +175,15 @@ void Renderer::Render()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
-    m_skyboxShader.SetUniform1i("skybox", 0);
-    // draw skybox last
-    glDepthFunc(GL_LEQUAL);
+    // draw skybox after everything else
+    glDepthFunc(GL_LEQUAL); // change depth function so depth test passes when values are equal to depth buffer's content
     m_skyboxShader.Bind();
     Camera *myCamera = this->GetCamera(0);
     glm::mat4 view1 = glm::make_mat4(&myCamera->GetWorldToViewmatrix()[0][0]);
-    glm::mat4 view2 = glm::mat4(glm::mat3(view1));
+    glm::mat4 view2 = glm::mat4(glm::mat3(view1)); // Remove the translation part of the view matrix
     m_skyboxShader.SetUniformMatrix4fv("view", glm::value_ptr(view2));
     m_skyboxShader.SetUniformMatrix4fv("projection", &m_projectionMatrix[0][0]);
+    m_skyboxShader.SetUniform1i("skybox", 0);
     glBindVertexArray(skyboxVAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubemapTexture);

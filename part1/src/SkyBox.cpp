@@ -12,12 +12,15 @@ SkyBox::~SkyBox(){
 
 }
 
+// Load the cubemap from the given faces
 unsigned int SkyBox::loadCubemap()
 {
+    // Generate and bind texture
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
+    // Set the texture target parameter for each face of the cubemap 
     int width, height, nrChannels;
     for (unsigned int i = 0; i < m_faces.size(); i++)
     {
@@ -35,6 +38,8 @@ unsigned int SkyBox::loadCubemap()
             stbi_image_free(data);
         }
     }
+
+    // Specify wrapping and filtering methods
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
