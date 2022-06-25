@@ -12,13 +12,13 @@
 * Name and partners name(At most teams of 2 folks total)
   * Team member 1: Andrey Piterkin
   * Team member 2: Rohan Chotirmall
-* How many hours did it take you to complete this final project? 
+* How many hours did it take you to complete this final project? 16 hours
 * Did you collaborate or share ideas with any other students/TAs/Professors?
 * Did you use any external resources? 
   * Note it is fair to utilize some tutorials--cite them here. You **must** add your own personal touch however!
   * https://learnopengl.com/Advanced-OpenGL/Cubemaps
   * https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-series-free-103633#description
-  * *edit this*
+  * https://rtouti.github.io/graphics/perlin-noise-algorithm
   * (Optional) What was the most interesting part of the Final Assignment? How could the instructor improve the final project?
 
 ### Rubric
