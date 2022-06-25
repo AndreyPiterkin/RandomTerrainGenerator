@@ -44,7 +44,7 @@ void Geometry::AddVertex(float x, float y, float z, float s, float t){
 void Geometry::AddIndex(unsigned int i){
     // Simple bounds check to make sure a valid index is added.
     if(i >= 0 && i <= m_vertexPositions.size()/3){
-        m_indices.push_back(i);
+        m_tempVerts.push_back(i);
     }else{
         std::cout << "(Geometry.cpp) ERROR, invalid index\n";
     }
@@ -73,7 +73,11 @@ unsigned int Geometry::GetBufferSizeInBytes(){
 void Geometry::Gen(){
 	assert((m_vertexPositions.size()/3) == (m_textureCoords.size()/2));
 
-	int coordsPos =0;
+    // std::cout << m_tempVerts.size();
+    for (int i = 0; i < m_tempVerts.size() / 3; i++) {
+        MakeTriangle(m_tempVerts[i*3+0], m_tempVerts[i*3+1], m_tempVerts[i*3+2]);
+    }
+    int coordsPos =0;
 	for(int i =0; i < m_vertexPositions.size()/3; ++i){
 	// First vertex
 		// vertices
@@ -101,7 +105,6 @@ void Geometry::Gen(){
 		m_bufferData.push_back(m_biTangents[i*3+2]);
 	}
 }
-
 // The big trick here, is that when we make a triangle
 // We also need to update our m_normals, tangents, and bi-tangents.
 void Geometry::MakeTriangle(unsigned int vert0, unsigned int vert1, unsigned int vert2){
@@ -146,14 +149,14 @@ void Geometry::MakeTriangle(unsigned int vert0, unsigned int vert1, unsigned int
 	
 	// Compute a normal
 	// For now we sort of 'cheat' since this is a quad the 'z' axis points straight out
-    glm::vec3 normal1{m_normals[vert0*3+0] ,m_normals[vert0*3+1], m_normals[vert0*3+2]};
-    glm::vec3 normal2{m_normals[vert1*3+0] ,m_normals[vert1*3+1], m_normals[vert1*3+2]};
-    glm::vec3 normal3{m_normals[vert2*3+0] ,m_normals[vert2*3+1], m_normals[vert2*3+2]};
+    glm::vec3 normal1 = glm::cross(tangent, bitangent) * -1.f;
+    // glm::vec3 normal2{m_normals[vert1*3+0] ,m_normals[vert1*3+1], m_normals[vert1*3+2]};
+    // glm::vec3 normal3{m_normals[vert2*3+0] ,m_normals[vert2*3+1], m_normals[vert2*3+2]};
 
 
-	m_normals[vert0*3+0] = 0.0f;	m_normals[vert0*3+1] = 0.0f;	m_normals[vert0*3+2] = 1.0f;	
-	m_normals[vert1*3+0] = 0.0f;	m_normals[vert1*3+1] = 0.0f;	m_normals[vert1*3+2] = 1.0f;	
-	m_normals[vert2*3+0] = 0.0f;	m_normals[vert2*3+1] = 0.0f;	m_normals[vert2*3+2] = 1.0f;	
+	m_normals[vert0*3+0] = normal1.x;	m_normals[vert0*3+1] = normal1.y;	m_normals[vert0*3+2] = normal1.z;	
+	m_normals[vert1*3+0] = normal1.x;	m_normals[vert1*3+1] = normal1.y;	m_normals[vert1*3+2] = normal1.z;	
+	m_normals[vert2*3+0] = normal1.x;	m_normals[vert2*3+1] = normal1.y;	m_normals[vert2*3+2] = normal1.z;	
 		
 	// Compute a tangent
 	m_tangents[vert0*3+0] = tangent.x; m_tangents[vert0*3+1] = tangent.y; m_tangents[vert0*3+2] = tangent.z;	

@@ -78,6 +78,7 @@ void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera){
         // TODO: This assumes every SceneNode is a 'Terrain' so this shader setup code
         //       needs to be moved preferably to 'Object' or 'Terrain'
         m_shader->SetUniform1i("u_DetailMap",1);  
+        m_shader->SetUniform1i("u_AuxilDetail",2);
         // Set the MVP Matrix for our object
         // Send it into our shader
         m_shader->SetUniformMatrix4fv("model", &m_worldTransform.GetInternalMatrix()[0][0]);

@@ -34,7 +34,7 @@ public:
     // Object destructor
     ~Object();
     // Load a texture
-    void LoadTexture(std::string fileName);
+    void LoadTexture(std::string fileName, std::string filename2, std::string filename3);
     // Create a textured quad
     void MakeTexturedQuad(std::string fileName);
     // How to draw the object
@@ -49,6 +49,8 @@ protected: // Classes that inherit from Object are intended to be overriden.
     Texture m_textureDiffuse;
     // Terrains are often 'multitextured' and have multiple textures.
     Texture m_detailMap; // NOTE: Note yet supported
+
+    Texture m_auxilDetail;
     // Store the objects Geometry
 	Geometry m_geometry;
 };

@@ -36,15 +36,20 @@ in vec3 FragPos;
 
 // If we have texture coordinates, they are stored in this sampler.
 uniform sampler2D u_DiffuseMap; 
+// Load in an additional detail map
+uniform sampler2D u_DetailMap; 
+uniform sampler2D u_AuxilDetail; 
 
 void main()
 {
     // Compute the normal direction
     vec3 norm = normalize(myNormal);
     vec3 tempDiffuse  = texture(u_DiffuseMap, v_texCoord).rgb;
-    vec3 white  = vec3(0.8f, 0.8f, 0.8f);
+    vec3 detailColor  = texture(u_DetailMap,  v_texCoord).rgb;
+    vec3 auxilDetail = texture(u_AuxilDetail,  v_texCoord).rgb;
+    //max(0, pow(FragPos.y/120, 3))
     // Store our final texture color
-    vec3 diffuseColor = mix(tempDiffuse, white, pow(max(0, FragPos.y/85.0), 8));
+    vec3 diffuseColor = mix(mix(tempDiffuse, detailColor, pow(dot(norm, vec3(0, 1, 0)), 15)), auxilDetail, max(0, pow(FragPos.y/95, 3)));
 
 
 	// Store our final lighting computation

@@ -27,12 +27,12 @@ Renderer::Renderer(unsigned int w, unsigned int h)
     m_skyboxShader.CreateShader(vertexShader, fragmentShader);
 
     std::vector<std::string> faces{
-        "./skybox/right.jpg",
-        "./skybox/left.jpg",
-        "./skybox/top.jpg",
-        "./skybox/bottom.jpg",
-        "./skybox/front.jpg",
-        "./skybox/back.jpg"};
+        "./skybox2/right.jpg",
+        "./skybox2/left.jpg",
+        "./skybox2/top.jpg",
+        "./skybox2/bottom.jpg",
+        "./skybox2/front.jpg",
+        "./skybox2/back.jpg"};
     SkyBox skyBox(faces);
     m_cubemapTexture = skyBox.loadCubemap();
 

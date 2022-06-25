@@ -6,35 +6,16 @@
 
 // Constructor for our object
 // Calls the initialization method
-Terrain::Terrain(unsigned int xSegs, unsigned int zSegs, std::string fileName) : 
+Terrain::Terrain(unsigned int xSegs, unsigned int zSegs) : 
                 m_xSegments(xSegs), m_zSegments(zSegs) {
     std::cout << "(Terrain.cpp) Constructor called \n";
 
-    // Load up some image data
-
-    Image heightMap(fileName);
-    heightMap.LoadPPM(true);
-
-    // Set the height data for the image
-    // TODO: Currently there is a 1-1 mapping between a pixel and a segment
-    // You might consider interpolating values if there are more segments
-    // than pixels. 
-    float scale = 5.0f; // Note that this scales down the values to make
-                        // the image a bit more flat.
     // Create height data
     m_heightData = new float[m_xSegments*m_zSegments];
-    // Set the height data equal to the grayscale value of the heightmap
-    // Because the R,G,B will all be equal in a grayscale iamge, then
-    // we just grab one of the color components.
 
-    // TODO: (Inclass) Implement populate heightData!
-    // Perlin2D noise(m_xSegments, m_zSegments);
-    // for(unsigned int z=0; z < m_zSegments; ++z){
-    //     for(unsigned int x=0; x < m_xSegments; ++x){
-    //         m_heightData[x+z*m_xSegments] = noise.eval(0.05f * x, 0.05f*z);
-    //     }
-    // }
-    Perlin2D hm(m_xSegments, m_zSegments, 13);
+    // Generate Perlin noise
+    Perlin2D hm(m_xSegments, m_zSegments, 15);
+    hm.saveAsPPM("./assets/textures/noise.ppm");
     m_heightData = hm.getTexture();
 
     // Initialize the terrain
@@ -60,10 +41,9 @@ void Terrain::Init(){
     // TODO: (Inclass) Build grid of vertices! 
     for(unsigned int z=0; z < m_zSegments; ++z){
         for(unsigned int x =0; x < m_xSegments; ++x){
-            float u = 1.0f - ((float)x/(float)m_xSegments);
-            float v = 1.0f - ((float)z/(float)m_zSegments);
-            // Calculate the correct position and add the texture coordinates
-            m_geometry.AddVertex(x,pow(50 * m_heightData[x+z*m_xSegments], 1.5)-200,z,u,v);
+            float u = ((float)x/(float)m_xSegments);
+            float v = ((float)z/(float)m_zSegments);
+            m_geometry.AddVertex(x,300.f / (1 + exp(-2 * pow(m_heightData[x+z*m_xSegments]+0.3,3) + 2))-100,z,u,v);
         }
     }
     
@@ -95,15 +75,9 @@ void Terrain::Init(){
                                         m_geometry.GetIndicesDataPtr());
 }
 
-
-
-// Loads an image and uses it to set the heights of the terrain.
-void Terrain::LoadHeightMap(Image image){
-
-}
-
-void Terrain::LoadTextures(std::string colormap, std::string detailmap){ 
+void Terrain::LoadTextures(std::string colormap, std::string detailmap, std::string auxilMap){ 
         // Load our actual textures
-        m_textureDiffuse.LoadTexture(colormap); // Found in object
-        m_detailMap.LoadTexture(detailmap);     // Found in object
+        m_textureDiffuse.LoadTexture(colormap, 0); // Found in object
+        m_detailMap.LoadTexture(detailmap, 0);     // Found in object
+        m_auxilDetail.LoadTexture(auxilMap, 0);
 }

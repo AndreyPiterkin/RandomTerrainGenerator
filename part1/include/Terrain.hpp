@@ -21,7 +21,7 @@
 class Terrain : public Object {
 public:
     // Takes in a Terrain and a filename for the heightmap.
-    Terrain (unsigned int xSegs, unsigned int zSegs, std::string fileName);
+    Terrain (unsigned int xSegs, unsigned int zSegs);
     // Destructor
     ~Terrain ();
     // override the initilization routine.
@@ -30,12 +30,16 @@ public:
     // This then sets the heights of the terrain.
     void LoadHeightMap(Image image);
     // Load textures
-    void LoadTextures(std::string colormap, std::string detailmap);
+    void LoadTextures(std::string colormap, std::string detailmap, std::string auxilDetail);
 
 private:
     // data
     unsigned int m_xSegments;
     unsigned int m_zSegments;
+
+    // Need custom textures parameters
+    Texture m_lowHeight;
+    Texture m_bigHeight;
 
     // Store the height in a multidimensional array
     float* m_heightData;

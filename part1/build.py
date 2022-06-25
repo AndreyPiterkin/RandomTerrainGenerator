@@ -3,7 +3,7 @@ import os
 import platform
 
 # (1)==================== COMMON CONFIGURATION OPTIONS ======================= #
-COMPILER="g++ -std=c++17"   # The compiler we want to use 
+COMPILER="g++ -g -std=c++17"   # The compiler we want to use 
                                 #(You may try g++ if you have trouble)
 SOURCE="./src/*.cpp"    # Where the source code lives
 EXECUTABLE="project"        # Name of the final executable
@@ -17,16 +17,16 @@ LIBRARIES=""            # What libraries do we want to include
 
 if platform.system()=="Linux":
     ARGUMENTS="-D LINUX" # -D is a #define sent to preprocessor
-    INCLUDE_DIR="-I ./include/ -I/Library/Frameworks/SDL2.framework/Headers -I./thirdparty/old/glm"
+    INCLUDE_DIR="-I ./include/ -I ./../common/thirdparty/glm/"
     LIBRARIES="-lSDL2 -ldl"
 elif platform.system()=="Darwin":
     ARGUMENTS="-D MAC" # -D is a #define sent to the preprocessor.
-    INCLUDE_DIR="-I ./include/ -I/Library/Frameworks/SDL2.framework/Headers -I./thirdparty/old/glm"
+    INCLUDE_DIR="-I ./include/ -I/Library/Frameworks/SDL2.framework/Headers -I ./thirdparty/old/glm"
     LIBRARIES="-F/Library/Frameworks -framework SDL2"
 elif platform.system()=="Windows":
     COMPILER="g++ -std=c++17" # Note we use g++ here as it is more likely what you have
     ARGUMENTS="-D MINGW -std=c++14 -static-libgcc -static-libstdc++" 
-    INCLUDE_DIR="-I ./include/ -I/Library/Frameworks/SDL2.framework/Headers -I./thirdparty/old/glm"
+    INCLUDE_DIR="-I./include/ -I./../common/thirdparty/old/glm/"
     EXECUTABLE="lab.exe"
     LIBRARIES="-lmingw32 -lSDL2main -lSDL2 -mwindows"
 # (2)=================== Platform specific configuration ===================== #

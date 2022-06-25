@@ -13,9 +13,11 @@ Object::~Object(){
 // TODO: In the future it may be good to 
 // think about loading a 'default' texture
 // if the user forgets to do this action!
-void Object::LoadTexture(std::string fileName){
+void Object::LoadTexture(std::string fileName, std::string fileName2, std::string filename3){
         // Load our actual textures
-        m_textureDiffuse.LoadTexture(fileName);
+        m_textureDiffuse.LoadTexture(fileName, 0);
+        m_detailMap.LoadTexture(fileName2, 0);
+        m_auxilDetail.LoadTexture(filename3, 0);
 }
 
 // Initialization of object as a 'quad'
@@ -52,7 +54,7 @@ void Object::MakeTexturedQuad(std::string fileName){
 
         // Load our actual texture
         // We are using the input parameter as our texture to load
-        m_textureDiffuse.LoadTexture(fileName.c_str());
+        m_textureDiffuse.LoadTexture(fileName.c_str(), 0);
 }
 
 // Bind everything we need in our object
@@ -64,7 +66,8 @@ void Object::Bind(){
         // Diffuse map is 0 by default, but it is good to set it explicitly
         m_textureDiffuse.Bind(0);
         // Detail map
-//        m_detailMap.Bind(1); // NOTE: Not yet supported
+        m_detailMap.Bind(1); // NOTE: Not yet supported
+        m_auxilDetail.Bind(2);
 }
 
 // Render our geometry

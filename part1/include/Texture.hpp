@@ -21,7 +21,7 @@ public:
     // Destructor
     ~Texture();
 	// Loads and sets up an actual texture
-    void LoadTexture(const std::string filepath);
+    void LoadTexture(const std::string filepath, int colorType);
 	// slot tells us which slot we want to bind to.
     // We can have multiple slots. By default, we
     // will set our slot to 0 if it is not specified.

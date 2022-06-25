@@ -93,8 +93,8 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback)
     std::shared_ptr<Renderer> renderer = std::make_shared<Renderer>(m_width, m_height);
 
     // Create our terrain
-    std::shared_ptr<Terrain> myTerrain = std::make_shared<Terrain>(512, 512, "./assets/textures/terrain2.ppm");
-    myTerrain->LoadTextures("./assets/textures/detailmap.ppm", "./assets/textures/detailmap.ppm");
+    std::shared_ptr<Terrain> myTerrain = std::make_shared<Terrain>(512, 512);
+    myTerrain->LoadTextures("./assets/textures/detailmap.ppm", "./assets/textures/tilegrass.ppm", "./assets/textures/snowT.ppm");
 
     // Create a node for our terrain
     std::shared_ptr<SceneNode> terrainNode;

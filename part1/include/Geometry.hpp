@@ -54,6 +54,7 @@ private:
 	std::vector<float> m_normals;
 	std::vector<float> m_tangents;
 	std::vector<float> m_biTangents;
+    std::vector<unsigned int> m_tempVerts;
 
 	// The indices for a indexed-triangle mesh
 	std::vector<unsigned int> m_indices;

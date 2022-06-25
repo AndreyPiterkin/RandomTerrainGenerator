@@ -33,7 +33,7 @@ Texture::~Texture(){
 
 }
 
-void Texture::LoadTexture(const std::string filepath){
+void Texture::LoadTexture(const std::string filepath, int colorType){
 	// Set member variable
     m_filepath = filepath;
     // Load our actual image data
@@ -65,7 +65,7 @@ void Texture::LoadTexture(const std::string filepath){
                         m_image->GetWidth(),
                         m_image->GetHeight(),
 						0,
-						GL_RGB,
+						(colorType == 0) ? GL_RGB : GL_RGBA,
 						GL_UNSIGNED_BYTE,
 						 m_image->GetPixelDataPtr()); // Here is the raw pixel data
     // We are done with our texture data so we can unbind.
